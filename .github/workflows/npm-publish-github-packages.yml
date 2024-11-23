@@ -18,16 +18,67 @@ jobs:
       with:
         node-version: '18'
 
+    # Install and build client
     - name: Install and Build Client
       working-directory: ./client
       run: |
         npm install
         npm run build
 
+    # Install and build server
     - name: Install and Build Server
       working-directory: ./backend
       run: |
         npm install
+
+    # Run Frontend Unit Tests
+    - name: Run Frontend Unit Tests
+      working-directory: ./client
+      run: |
+        npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+        npm test -- --ci --coverage
+
+    # Run Backend Unit Tests
+    - name: Run Backend Unit Tests
+      working-directory: ./backend
+      run: |
+        npm install --save-dev jest supertest
+        npm test -- --ci --coverage
+
+    # Run Integration Tests (Frontend)
+    - name: Run Frontend Integration Tests
+      working-directory: ./client
+      run: |
+        npm install --save-dev msw axios
+        npm test -- --ci --coverage
+
+    # Run Selenium Tests (Optional)
+    - name: Run Selenium Tests
+      working-directory: ./backend/seleniumTests
+      run: |
+        sudo apt-get install -y chromium-browser
+        npm install --save-dev selenium-webdriver
+        node seleniumTest.js
+
+    # Run Load/Stress Tests
+    - name: Run Load/Stress Tests
+      working-directory: ./backend/loadTests
+      run: |
+        npm install -g artillery
+        artillery run loadTest.yaml
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
     - name: Deploy to Hosting Platform
       run: |
