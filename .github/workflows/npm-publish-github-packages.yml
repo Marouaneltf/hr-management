@@ -1,0 +1,34 @@
+name: Deploy React and Express App
+
+on:
+  push:
+    branches:
+      - main  # Adjust branch as necessary
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install and Build Client
+      working-directory: ./client
+      run: |
+        npm install
+        npm run build
+
+    - name: Install and Build Server
+      working-directory: ./backend
+      run: |
+        npm install
+
+    - name: Deploy to Hosting Platform
+      run: |
+        echo "Add deployment command here, e.g., upload to your server"
