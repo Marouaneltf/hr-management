@@ -1,5 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, screen } from '@testing-library/react';
-import Attendance from '../Attendance';
+import Attendance from '../../Pages/Attendance';
 
 test('renders Attendance component', () => {
   render(<Attendance />);

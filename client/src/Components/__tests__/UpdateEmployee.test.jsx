@@ -1,5 +1,10 @@
+/**
+ * @jest-environment jsdom
+ */
+
+import React from 'react'; // Ensure React is imported
 import { render, screen, fireEvent } from '@testing-library/react';
-import UpdateEmployee from '../UpdateEmployee';
+import UpdateEmployee from '../../Pages/UpdateEmployee';
 
 test('renders UpdateEmployee form', () => {
   render(<UpdateEmployee />);
